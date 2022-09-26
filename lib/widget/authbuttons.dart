@@ -14,7 +14,7 @@ class AuthButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       borderRadius: BorderRadius.circular(50),
-      color: Colors.black,
+      color: const Color(0xff404040),
       child: InkWell(
         borderRadius: BorderRadius.circular(50),
         onTap: () {
@@ -23,11 +23,12 @@ class AuthButton extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           width: width,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           child: Text(
             buttonText,
             style: const TextStyle(
               color: Colors.white,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

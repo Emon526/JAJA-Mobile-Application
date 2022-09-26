@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'auth/signin.dart';
-import 'auth/signup.dart';
+import 'screens/auth/signin.dart';
+import 'screens/auth/signup.dart';
 import 'widget/authbuttons.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,6 +11,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: const Color(0xff90fc63),
       appBar: AppBar(
         backgroundColor: const Color(0xff40039B),
         elevation: 0,
@@ -19,9 +20,8 @@ class HomeScreen extends StatelessWidget {
         ),
         centerTitle: false,
       ),
-      body: Container(
-        color: const Color(0xff90fc63),
-        padding: const EdgeInsets.all(50),
+      body: Padding(
+        padding: const EdgeInsets.all(50.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

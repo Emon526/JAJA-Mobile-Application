@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "303909345121",
+    "project_id": "jaja-79a0d",
+    "storage_bucket": "jaja-79a0d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303909345121:android:48f9107b9c1aa843479720",
+        "android_client_info": {
+          "package_name": "com.example.jaja"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303909345121-b1miop4t315kts80keoacj84i40nr95d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUm_ka3zzp1sdq_tkvRnP47Pa7yLYlUCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303909345121-b1miop4t315kts80keoacj84i40nr95d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
