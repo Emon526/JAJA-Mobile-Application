@@ -65,12 +65,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: islogged
-      //     ? ProfileScreen(
-      //         uid: uid,
-      //       )
-      //     : const HomeScreen(),
-      home: UserScreen(),
+      home: islogged ? const SearchUser() : const HomeScreen(),
 
       routes: {
         HomeScreen.routeName: (context) => const HomeScreen(),
