@@ -6,6 +6,7 @@ import '../../widget/inputfield.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
+  static const routeName = "/SignInScreen";
 
   @override
   State<SignIn> createState() => _SignInState();

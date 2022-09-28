@@ -7,6 +7,7 @@ import 'signin.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
+  static const routeName = "/SignUpScreen";
 
   @override
   State<SignUp> createState() => _SignUpState();
@@ -186,10 +187,8 @@ class _SignUpState extends State<SignUp> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignIn()));
+                        Navigator.pushReplacementNamed(
+                            context, '/SignInScreen');
                       },
                       child: const Text(
                         "Sign in",

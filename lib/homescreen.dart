@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'screens/auth/signin.dart';
-import 'screens/auth/signup.dart';
 import 'widget/authbuttons.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+  static const routeName = "/HomeScreen";
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +39,7 @@ class HomeScreen extends StatelessWidget {
             ),
             AuthButton(
               ontap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const SignIn()));
+                Navigator.pushNamed(context, '/SignInScreen');
               },
               buttonText: "SIGN IN",
               width: size.width,
@@ -52,8 +49,7 @@ class HomeScreen extends StatelessWidget {
             ),
             AuthButton(
               ontap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const SignUp()));
+                Navigator.pushNamed(context, '/SignUpScreen');
               },
               buttonText: "SIGN UP",
               width: size.width,

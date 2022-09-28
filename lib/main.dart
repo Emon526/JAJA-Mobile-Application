@@ -1,7 +1,14 @@
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import 'screens/auth/signin.dart';
+import 'package:jaja/screens/auth/signin.dart';
+import 'package:jaja/screens/auth/signup.dart';
+import 'package:jaja/screens/profilescreen.dart';
+import 'package:jaja/screens/searchuser.dart';
+import 'package:jaja/screens/userscreen.dart';
+import 'package:jaja/services/authservice.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'homescreen.dart';
 
 void main() async {
@@ -11,8 +18,44 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool islogged = false;
+  String uid = '';
+  @override
+  void initState() {
+    checkUserLogin();
+    super.initState();
+  }
+
+  void checkUserLogin() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString('uid');
+    if (userId != null) {
+      setState(() {
+        islogged = true;
+        uid = userId;
+        // AuthController().getuserData(uid);
+      });
+
+      log(islogged.toString());
+      log(uid);
+    } else {
+      setState(() {
+        islogged = false;
+        uid = '';
+      });
+
+      log(uid);
+      log(islogged.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +65,23 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      // home: islogged
+      //     ? ProfileScreen(
+      //         uid: uid,
+      //       )
+      //     : const HomeScreen(),
+      home: UserScreen(),
+
+      routes: {
+        HomeScreen.routeName: (context) => const HomeScreen(),
+        SignIn.routeName: (context) => const SignIn(),
+        SignUp.routeName: (context) => const SignUp(),
+        ProfileScreen.routeName: (context) => ProfileScreen(
+              uid: uid,
+            ),
+        SearchUser.routeName: (context) => const SearchUser(),
+        UserScreen.routeName: (context) => const UserScreen(),
+      },
       // home: const SignIn(),
     );
   }

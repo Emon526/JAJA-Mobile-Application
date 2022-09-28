@@ -6,8 +6,8 @@ class SignUpModel {
   String email;
   String phone;
   String password;
-
   String uid;
+  String? profilePhoto;
 
   SignUpModel({
     required this.firstname,
@@ -16,6 +16,7 @@ class SignUpModel {
     required this.password,
     required this.phone,
     required this.uid,
+    this.profilePhoto = "empty",
   });
   Map<String, dynamic> toJson() => {
         "firstname": firstname,
@@ -24,6 +25,7 @@ class SignUpModel {
         "phone": phone,
         "password": password,
         "uid": uid,
+        "profilePhoto": profilePhoto,
       };
 
   static SignUpModel fromSnap(DocumentSnapshot snap) {
@@ -35,6 +37,7 @@ class SignUpModel {
       email: snapshot['email'],
       password: snapshot['password'],
       phone: snapshot['phone'],
+      profilePhoto: snapshot['profilePhoto'],
     );
   }
 }
