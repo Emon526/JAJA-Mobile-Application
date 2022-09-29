@@ -1,6 +1,9 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 
 class SearchUser extends StatelessWidget {
@@ -10,6 +13,7 @@ class SearchUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final databaseref = FirebaseDatabase.instance.ref('Users');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff40039B),
@@ -44,26 +48,33 @@ class SearchUser extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            _buildUserCard(
-              onTap: () {
-                Navigator.pushNamed(context, '/UserScreen');
-                log('message1');
+            Expanded(
+                child: FirebaseAnimatedList(
+              query: databaseref,
+              defaultChild: const Center(
+                child: CircularProgressIndicator(),
+              ),
+              itemBuilder: (context, snapshot, animation, index) {
+                // log(snapshot.value.toString());
+                if (snapshot.value
+                    .toString()
+                    .contains(FirebaseAuth.instance.currentUser!.uid)) {
+                  return SizedBox();
+                }
+                return _buildUserCard(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/UserScreen');
+                    log('message1');
+                  },
+                  title:
+                      '${snapshot.child('firstname').value} ${snapshot.child('lastname').value} '
+                          .toString(),
+                  follewers: '0 Followers',
+                  imageurl: '${snapshot.child('profilePhoto').value}',
+                  size: size.width,
+                );
               },
-              title: 'Asraful Islam',
-              follewers: '0 Followers',
-              imageurl:
-                  'https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg',
-              size: size.width,
-            ),
-            _buildUserCard(
-              onTap: () {
-                log('message2');
-              },
-              title: 'Asraful Islam',
-              follewers: '0 Followers',
-              imageurl: '',
-              size: size.width,
-            ),
+            )),
           ],
         ),
       ),
