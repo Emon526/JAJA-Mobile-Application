@@ -2,16 +2,15 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 import 'package:flutter/material.dart';
-import 'package:jaja/models/user.dart';
+import '../models/user.dart';
 import '../../models/signupmodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController {
   var firestore = FirebaseFirestore.instance;
   var firebaseAuth = FirebaseAuth.instance;
-  final databaseref = FirebaseDatabase.instance.ref('Users');
 
   void signOut() async {
     await firebaseAuth.signOut();
@@ -77,11 +76,11 @@ class AuthController {
           uid: cred.user!.uid,
           profilePhoto: 'okhijjj',
         );
-        // await firestore
-        //     .collection('users')
-        //     .doc(cred.user!.uid)
-        //     .set(user.toJson())
-        databaseref.child(cred.user!.uid).set(user.toJson()).then((value) {
+        await firestore
+            .collection('users')
+            .doc(cred.user!.uid)
+            .set(user.toJson())
+            .then((value) {
           const snackbar = SnackBar(
             content: Text("SIGN UP Succesful.please log in"),
           );
@@ -95,38 +94,6 @@ class AuthController {
       final snackbar = SnackBar(content: Text(e.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     }
-  }
-
-  getuserData(
-    String uid,
-  ) async {
-    // DocumentSnapshot userDoc =
-    //     await firestore.collection('users').doc(uid).get();
-    // final databaseref = FirebaseDatabase.instance.ref('Users').child(uid).get();
-    log(uid);
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document exists on the database');
-      }
-    });
-    // final Map userData = databaseref as Map;
-    // log(databaseref.toString());
-    // log(userData.toString());
-    // log(userData.toString());
-    // UserModel user = UserModel(
-    //     firstname: userData['firstname'],
-    //     lastname: userData['lastname'],
-    //     email: userData['email'],
-    //     phone: userData['phone'],
-    //     password: userData['password'],
-    //     uid: userData['uid'],
-    //     profilePhoto: userData['profilePhoto']);
-    // log(user.toString());
-    return databaseref;
   }
 
 //   void getuserData({

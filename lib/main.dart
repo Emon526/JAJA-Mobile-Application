@@ -71,9 +71,7 @@ class _MyAppState extends State<MyApp> {
         HomeScreen.routeName: (context) => const HomeScreen(),
         SignIn.routeName: (context) => const SignIn(),
         SignUp.routeName: (context) => const SignUp(),
-        ProfileScreen.routeName: (context) => ProfileScreen(
-              uid: uid,
-            ),
+        ProfileScreen.routeName: (context) => const ProfileScreen(),
         SearchUser.routeName: (context) => const SearchUser(),
         UserScreen.routeName: (context) => const UserScreen(),
       },

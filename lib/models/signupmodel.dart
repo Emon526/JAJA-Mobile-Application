@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUpModel {
-  String firstname;
-  String lastname;
-  String email;
-  String phone;
-  String password;
-  String uid;
+  String? firstname;
+  String? lastname;
+  String? email;
+  String? phone;
+  String? password;
+  String? uid;
   String? profilePhoto;
 
   SignUpModel({
@@ -16,7 +16,7 @@ class SignUpModel {
     required this.password,
     required this.phone,
     required this.uid,
-    this.profilePhoto = "empty",
+    this.profilePhoto = "iiyvhj",
   });
   Map<String, dynamic> toJson() => {
         "firstname": firstname,
