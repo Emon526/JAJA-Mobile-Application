@@ -1,14 +1,13 @@
 import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:jaja/services/authservice.dart';
+
+import '../services/authservice.dart';
 
 class UserScreen extends StatelessWidget {
   final String uid;
-  // static const routeName = "/UserScreen";
   const UserScreen({super.key, required this.uid});
 
   @override
@@ -38,23 +37,10 @@ class UserScreen extends StatelessWidget {
             StreamBuilder(
                 stream: firestore.collection('users').doc(uid).snapshots(),
                 builder: (context, snapshot) {
-                  // // log(snapshot.data.data().toString());
-                  firestore
-                      .collection('users')
-                      .doc(firebaseauth.currentUser!.uid)
-                      .collection('followers')
-                      .doc(uid)
-                      .get()
-                      .then((value) {
-                    if (value.exists) {
-                      isFollowing = true;
-                      log(isFollowing.toString());
-                    } else {
-                      isFollowing = false;
-                      log(isFollowing.toString());
-                    }
-                  });
                   if (snapshot.hasData) {
+                    final List followers = snapshot.data!.get('followers');
+                    isFollowing =
+                        followers.contains(firebaseauth.currentUser!.uid);
                     final profilephoto = snapshot.data!.get('profilePhoto');
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,9 +85,9 @@ class UserScreen extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        const Text(
-                          '0 Followers',
-                          style: TextStyle(
+                        Text(
+                          '${followers.length} Followers',
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -110,22 +96,24 @@ class UserScreen extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            log('follow');
-                            // AuthController().followuser(
-                            //     followeruid: snapshot.data!.get('uid'));
-                            // isFollowing ?
+                            log(snapshot.data!.get('uid'));
+                            isFollowing
+                                ? AuthController().unfollowuser(
+                                    followeruid: snapshot.data!.get('uid'))
+                                : AuthController().followuser(
+                                    followeruid: snapshot.data!.get('uid'));
                           },
                           child: Material(
                             borderRadius: BorderRadius.circular(5),
                             color: const Color(0xff7BF946),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: 20,
                                 vertical: 10,
                               ),
                               child: Text(
                                 isFollowing ? 'UnFollow' : 'Follow',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

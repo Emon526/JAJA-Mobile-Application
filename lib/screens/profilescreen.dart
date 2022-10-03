@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../services/authservice.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -37,10 +36,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .doc(firebaseauth.currentUser!.uid)
               .snapshots(),
           builder: (context, snapshot) {
-            // // log(snapshot.data.data().toString());
-
             if (snapshot.hasData) {
               final profilephoto = snapshot.data!.get('profilePhoto');
+              final List followers = snapshot.data!.get('followers');
+              final List following = snapshot.data!.get('following');
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -133,12 +132,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
+                    children: [
                       Text('0 Recordings'),
-                      Text('0 Followers'),
                       Text(
-                        ' 1 Followers',
-                        style: TextStyle(
+                        '${followers.length} Followers',
+                      ),
+                      Text(
+                        '${following.length} Followings',
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
                         ),

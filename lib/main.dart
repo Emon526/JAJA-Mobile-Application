@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:jaja/screens/auth/signin.dart';
-import 'package:jaja/screens/auth/signup.dart';
-import 'package:jaja/screens/profilescreen.dart';
-import 'package:jaja/screens/searchuser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'homescreen.dart';
+import 'screens/auth/signin.dart';
+import 'screens/auth/signup.dart';
+import 'screens/profilescreen.dart';
+import 'screens/searchuser.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

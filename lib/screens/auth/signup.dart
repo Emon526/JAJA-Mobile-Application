@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../services/authservice.dart';
 import '../../widget/authbuttons.dart';
 import '../../widget/inputfield.dart';
-import 'signin.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});

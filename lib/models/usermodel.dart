@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-class SignUpModel {
+class UserModel {
   String? firstname;
   String? lastname;
   String? email;
@@ -8,10 +6,10 @@ class SignUpModel {
   String? password;
   String? uid;
   String? profilePhoto;
-  List<String>? following;
-  List<String>? followers;
+  List? following;
+  List? followers;
 
-  SignUpModel({
+  UserModel({
     required this.firstname,
     required this.lastname,
     required this.email,
@@ -33,17 +31,4 @@ class SignUpModel {
         "followers": followers,
         "following": following,
       };
-
-  // static SignUpModel fromSnap(DocumentSnapshot snap) {
-  //   var snapshot = snap.data() as Map<String, dynamic>;
-  //   return SignUpModel(
-  //     firstname: snapshot['firstname'],
-  //     uid: snapshot['uid'],
-  //     lastname: snapshot['lastname'],
-  //     email: snapshot['email'],
-  //     password: snapshot['password'],
-  //     phone: snapshot['phone'],
-  //     profilePhoto: snapshot['profilePhoto'],
-  //   );
-  // }
 }

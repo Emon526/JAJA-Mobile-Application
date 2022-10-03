@@ -1,10 +1,8 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
-import '../../models/signupmodel.dart';
+import '../models/usermodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController {
@@ -39,7 +37,7 @@ class AuthController {
           prefs.setString('uid', firebaseAuth.currentUser!.uid);
         });
 
-        log(firebaseAuth.currentUser!.uid);
+        // log(firebaseAuth.currentUser!.uid);
       } else {
         log("Input all fill");
       }
@@ -68,7 +66,7 @@ class AuthController {
           password: password,
         );
 
-        SignUpModel user = SignUpModel(
+        UserModel user = UserModel(
           firstname: firstname,
           lastname: lastname,
           email: email,
@@ -99,104 +97,105 @@ class AuthController {
     }
   }
 
-  // void followuser({required String followeruid}) async {
-  //   await firestore.collection('users').doc(followeruid).
-  //   //     .add({
-  //   //   "followers": firebaseAuth.currentUser!.uid,
-  //   // });
-  // }
+  void followuser({required String followeruid}) async {
+    // add the uid into followers list of that user
+    final followersdata =
+        await firestore.collection('users').doc(followeruid).get();
+    List followers = followersdata.get('followers');
+    followers.add(firebaseAuth.currentUser!.uid);
 
-  void getUserData({required String uid}) {
-//  List<String> thumbnails = [];
-//   int followers = 0;
-//       var followerDoc = await firestore
-//         .collection('users')
-//         .doc(firebaseAuth.currentUser!.uid)
-//         .collection('followers')
-//         .get();
-//  final followers = followerDoc.docs.length;
+    UserModel user = UserModel(
+      firstname: followersdata.get('firstname'),
+      lastname: followersdata.get('lastname'),
+      email: followersdata.get('email'),
+      phone: followersdata.get('phone'),
+      password: followersdata.get('password'),
+      uid: followersdata.get('uid'),
+      profilePhoto: followersdata.get('profilePhoto'),
+      followers: followers,
+      following: followersdata.get('following'),
+    );
+    await firestore.collection('users').doc(followeruid).set(user.toJson());
+    // log(user.toJson().toString());
+
+    // add following  uid into current user
+
+    final followingdata = await firestore
+        .collection('users')
+        .doc(firebaseAuth.currentUser!.uid)
+        .get();
+
+    List following = followingdata.get('following');
+    following.add(followeruid);
+    // log(following.toString());
+
+    UserModel currentuser = UserModel(
+      firstname: followingdata.get('firstname'),
+      lastname: followingdata.get('lastname'),
+      email: followingdata.get('email'),
+      phone: followingdata.get('phone'),
+      password: followingdata.get('password'),
+      uid: followingdata.get('uid'),
+      profilePhoto: followingdata.get('profilePhoto'),
+      followers: followingdata.get('followers'),
+      following: following,
+    );
+
+    await firestore
+        .collection('users')
+        .doc(firebaseAuth.currentUser!.uid)
+        .set(currentuser.toJson());
+    // log(currentuser.toJson().toString());
   }
 
-//   void getuserData({
-//     required String uid,
-//   }) async {
-//     List<String> thumbnails = [];
-//     // var myVideos = await firestore
-//     //     .collection('videos')
-//     //     .where('uid', isEqualTo: uid)
-//     //     .get();
-//     // for (int i = 0; i < myVideos.docs.length; i++) {
-//     //   thumbnails.add((myVideos.docs[i].data() as dynamic)['thumbnail']);
-//     // }
+  void unfollowuser({required String followeruid}) async {
+    // remove the uid from followers list of that user
+    final followersdata =
+        await firestore.collection('users').doc(followeruid).get();
+    List followers = followersdata.get('followers');
+    followers.remove(firebaseAuth.currentUser!.uid);
 
-//     // UserModel user = UserModel(
-//     //   firstname: firstname,
-//     //   lastname: lastname,
-//     //   email: email,
-//     //   phone: phone,
-//     //   password: password,
-//     //   uid: cred.user!.uid,
-//     // );
-//     DocumentSnapshot userDoc =
-//         await firestore.collection('users').doc(uid).get();
-//     final userData = userDoc.data() as Map;
-//     UserModel user = UserModel(
-//         firstname: userData['firstname'],
-//         lastname: userData['lastname'],
-//         email: userData['email'],
-//         phone: userData['phone'],
-//         password: userData['password'],
-//         uid: userData['uid'],
-//         profilePhoto: userData['profilePhoto']);
-//     log(user.toString());
+    UserModel user = UserModel(
+      firstname: followersdata.get('firstname'),
+      lastname: followersdata.get('lastname'),
+      email: followersdata.get('email'),
+      phone: followersdata.get('phone'),
+      password: followersdata.get('password'),
+      uid: followersdata.get('uid'),
+      profilePhoto: followersdata.get('profilePhoto'),
+      followers: followers,
+      following: followersdata.get('following'),
+    );
+    await firestore.collection('users').doc(followeruid).set(user.toJson());
+    // log(user.toJson().toString());
 
-//     // String name = userData['name'];
-//     // String profilePhoto = userData['profilePhoto'];
-//     // int likes = 0;
-//     int followers = 0;
-//     int following = 0;
-//     bool isFollowing = false;
+    // add following  uid into current user
 
-//     // for (var item in myVideos.docs) {
-//     //   likes += (item.data()['likes'] as List).length;
-//     // }
-//     var followerDoc = await firestore
-//         .collection('users')
-//         .doc(uid)
-//         .collection('followers')
-//         .get();
-//     var followingDoc = await firestore
-//         .collection('users')
-//         .doc(uid)
-//         .collection('following')
-//         .get();
-//     followers = followerDoc.docs.length;
-//     following = followingDoc.docs.length;
+    final followingdata = await firestore
+        .collection('users')
+        .doc(firebaseAuth.currentUser!.uid)
+        .get();
 
-//check is fllowing
-  // firestore
-  //     .collection('users')
-  //     .doc(uid)
-  //     .collection('followers')
-  //     .doc(authController.user.uid)
-  //     .get()
-  //     .then((value) {
-  //   if (value.exists) {
-  //     isFollowing = true;
-  //   } else {
-  //     isFollowing = false;
-  //   }
-  // });
+    List following = followingdata.get('following');
+    following.remove(followeruid);
+    // log(following.toString());
 
-// //set value
-//     // _user.value = {
-//     //   'followers': followers.toString(),
-//     //   'following': following.toString(),
-//     //   'isFollowing': isFollowing,
-//     //   'likes': likes.toString(),
-//     //   'profilePhoto': profilePhoto,
-//     //   'name': name,
-//     //   'thumbnails': thumbnails,
-//     // };
-//   }
+    UserModel currentuser = UserModel(
+      firstname: followingdata.get('firstname'),
+      lastname: followingdata.get('lastname'),
+      email: followingdata.get('email'),
+      phone: followingdata.get('phone'),
+      password: followingdata.get('password'),
+      uid: followingdata.get('uid'),
+      profilePhoto: followingdata.get('profilePhoto'),
+      followers: followingdata.get('followers'),
+      following: following,
+    );
+
+    await firestore
+        .collection('users')
+        .doc(firebaseAuth.currentUser!.uid)
+        .set(currentuser.toJson());
+    // log(currentuser.toJson().toString());
+  }
 }

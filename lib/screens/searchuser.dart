@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
-import 'package:jaja/screens/userscreen.dart';
+
+import 'userscreen.dart';
 
 class SearchUser extends StatelessWidget {
   static const routeName = "/SearchUserScreen";
@@ -16,7 +16,7 @@ class SearchUser extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final firebaseauth = FirebaseAuth.instance;
     final firestore = FirebaseFirestore.instance;
-    final _searchuserController = TextEditingController();
+    final searchuserController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -39,12 +39,13 @@ class SearchUser extends StatelessWidget {
               ontapprofileimage: () {
                 Navigator.pushNamed(context, '/ProfileScreen');
               },
-              controller: _searchuserController,
+              controller: searchuserController,
               uid: firebaseauth.currentUser!.uid,
               firestore: firestore,
             ),
-            _searchuserController.text.isEmpty
+            searchuserController.text.isEmpty
                 ? _buildTranding(
+                    firebaseAuth: firebaseauth,
                     firestore: firestore,
                     size: size.width,
                   )
@@ -55,13 +56,19 @@ class SearchUser extends StatelessWidget {
     );
   }
 
-  _buildTranding({
-    required FirebaseFirestore firestore,
-    required double size,
-  }) {
+  _buildTranding(
+      {required FirebaseFirestore firestore,
+      required double size,
+      required FirebaseAuth firebaseAuth}) {
     return Expanded(
       child: StreamBuilder(
-          stream: firestore.collection('users').snapshots(),
+          stream: firestore
+              .collection('users')
+              .orderBy(
+                'followers',
+                descending: true,
+              )
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Column(
@@ -86,11 +93,17 @@ class SearchUser extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final data = snapshot.data!.docs[index];
                           // log(data.data().toString());
+
+                          //skip current user
+                          if (data.id == firebaseAuth.currentUser!.uid) {
+                            return Container(height: 0);
+                          }
+                          final List followers = data.get('followers');
                           return _buildUserCard(
                               imageurl: data.get('profilePhoto'),
                               title:
                                   '${data.get('firstname')} ${data.get('lastname')}',
-                              follewers: '0',
+                              follewers: '${followers.length} Followers',
                               size: size,
                               onTap: () {
                                 Navigator.pushReplacement(
