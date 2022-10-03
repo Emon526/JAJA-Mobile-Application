@@ -304,31 +304,52 @@ class _SearchUserState extends State<SearchUser> {
               child: CircularProgressIndicator(),
             );
           }
-          return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                final data = snapshot.data!.docs[index];
-                // log(data.data().toString());
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                "Search Result",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Flexible(
+                child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      final data = snapshot.data!.docs[index];
+                      // log(data.data().toString());
 
-                //skip current user
-                // if (data.id == firebaseAuth.currentUser!.uid) {
-                //   return Container(height: 0);
-                // }
-                final List followers = data.get('followers');
-                return _buildUserCard(
-                    imageurl: data.get('profilePhoto'),
-                    title: '${data.get('firstname')} ${data.get('lastname')}',
-                    follewers: '${followers.length} Followers',
-                    size: size,
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  UserScreen(uid: data.get('uid'))));
-                      log(data.get('uid'));
-                    });
-              });
+                      //skip current user
+                      // if (data.id == firebaseAuth.currentUser!.uid) {
+                      //   return Container(height: 0);
+                      // }
+                      final List followers = data.get('followers');
+                      return _buildUserCard(
+                          imageurl: data.get('profilePhoto'),
+                          title:
+                              '${data.get('firstname')} ${data.get('lastname')}',
+                          follewers: '${followers.length} Followers',
+                          size: size,
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        UserScreen(uid: data.get('uid'))));
+                            log(data.get('uid'));
+                          });
+                    }),
+              ),
+            ],
+          );
         },
       ),
     );
