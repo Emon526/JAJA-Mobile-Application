@@ -7,16 +7,23 @@ import 'package:flutter/material.dart';
 
 import 'userscreen.dart';
 
-class SearchUser extends StatelessWidget {
+class SearchUser extends StatefulWidget {
   static const routeName = "/SearchUserScreen";
   const SearchUser({super.key});
 
   @override
+  State<SearchUser> createState() => _SearchUserState();
+}
+
+class _SearchUserState extends State<SearchUser> {
+  // bool isShowUsers = false;
+
+  final firebaseauth = FirebaseAuth.instance;
+  final firestore = FirebaseFirestore.instance;
+  final searchuserController = TextEditingController();
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final firebaseauth = FirebaseAuth.instance;
-    final firestore = FirebaseFirestore.instance;
-    final searchuserController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -43,13 +50,16 @@ class SearchUser extends StatelessWidget {
               uid: firebaseauth.currentUser!.uid,
               firestore: firestore,
             ),
-            searchuserController.text.isEmpty
-                ? _buildTranding(
+            searchuserController.text.isNotEmpty
+                ? _buildSearchResult(
+                    text: searchuserController.text.toUpperCase(),
+                    size: size.width,
+                  )
+                : _buildTranding(
                     firebaseAuth: firebaseauth,
                     firestore: firestore,
                     size: size.width,
-                  )
-                : Text('data'),
+                  ),
           ],
         ),
       ),
@@ -136,37 +146,39 @@ class SearchUser extends StatelessWidget {
     return Row(
       children: [
         Flexible(
-          child: TextField(
-            controller: controller,
-            autofocus: false,
-            textInputAction: TextInputAction.done,
-            keyboardType: TextInputType.name,
-            decoration: InputDecoration(
-              labelText: 'Search',
-              labelStyle: const TextStyle(
-                color: Colors.grey,
-                fontWeight: FontWeight.w500,
-              ),
-              fillColor: Colors.white,
-              filled: true,
-              border: InputBorder.none,
-              prefixIcon: const Icon(
-                Icons.search,
-                size: 24,
-                color: Colors.black,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50),
-                borderSide: const BorderSide(
-                  width: 2.0,
+          child: Form(
+            child: TextFormField(
+              controller: controller,
+              autofocus: false,
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                labelText: 'Search',
+                labelStyle: const TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),
+                fillColor: Colors.white,
+                filled: true,
+                border: InputBorder.none,
+                prefixIcon: const Icon(
+                  Icons.search,
+                  size: 24,
                   color: Colors.black,
                 ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50),
-                borderSide: const BorderSide(
-                  width: 2.0,
-                  color: Colors.black,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: const BorderSide(
+                    width: 2.0,
+                    color: Colors.black,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: const BorderSide(
+                    width: 2.0,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
@@ -268,6 +280,56 @@ class SearchUser extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  _buildSearchResult({
+    required String text,
+    required double size,
+  }) {
+    return Expanded(
+      child: StreamBuilder(
+        stream: firestore
+            .collection('users')
+            .where(
+              'firstname',
+              isGreaterThanOrEqualTo: text,
+            )
+            .snapshots(),
+        builder: (context, snapshot) {
+          log(snapshot.data!.docs.length.toString());
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                final data = snapshot.data!.docs[index];
+                // log(data.data().toString());
+
+                //skip current user
+                // if (data.id == firebaseAuth.currentUser!.uid) {
+                //   return Container(height: 0);
+                // }
+                final List followers = data.get('followers');
+                return _buildUserCard(
+                    imageurl: data.get('profilePhoto'),
+                    title: '${data.get('firstname')} ${data.get('lastname')}',
+                    follewers: '${followers.length} Followers',
+                    size: size,
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  UserScreen(uid: data.get('uid'))));
+                      log(data.get('uid'));
+                    });
+              });
+        },
       ),
     );
   }
