@@ -11,8 +11,10 @@ class AuthController {
   var firestore = FirebaseFirestore.instance;
   var firebaseAuth = FirebaseAuth.instance;
 
-  void signOut() async {
+  void signOut(BuildContext context) async {
+    Navigator.pushReplacementNamed(context, '/SignInScreen');
     await firebaseAuth.signOut();
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('uid');
   }
@@ -73,7 +75,9 @@ class AuthController {
           phone: phone,
           password: password,
           uid: cred.user!.uid,
-          profilePhoto: 'okhijjj',
+          profilePhoto: '',
+          followers: [],
+          following: [],
         );
         await firestore
             .collection('users')
@@ -93,6 +97,24 @@ class AuthController {
       final snackbar = SnackBar(content: Text(e.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     }
+  }
+
+  // void followuser({required String followeruid}) async {
+  //   await firestore.collection('users').doc(followeruid).
+  //   //     .add({
+  //   //   "followers": firebaseAuth.currentUser!.uid,
+  //   // });
+  // }
+
+  void getUserData({required String uid}) {
+//  List<String> thumbnails = [];
+//   int followers = 0;
+//       var followerDoc = await firestore
+//         .collection('users')
+//         .doc(firebaseAuth.currentUser!.uid)
+//         .collection('followers')
+//         .get();
+//  final followers = followerDoc.docs.length;
   }
 
 //   void getuserData({
@@ -151,20 +173,20 @@ class AuthController {
 //     followers = followerDoc.docs.length;
 //     following = followingDoc.docs.length;
 
-// //check is fllowing
-//     // firestore
-//     //     .collection('users')
-//     //     .doc(uid)
-//     //     .collection('followers')
-//     //     .doc(authController.user.uid)
-//     //     .get()
-//     //     .then((value) {
-//     //   if (value.exists) {
-//     //     isFollowing = true;
-//     //   } else {
-//     //     isFollowing = false;
-//     //   }
-//     // });
+//check is fllowing
+  // firestore
+  //     .collection('users')
+  //     .doc(uid)
+  //     .collection('followers')
+  //     .doc(authController.user.uid)
+  //     .get()
+  //     .then((value) {
+  //   if (value.exists) {
+  //     isFollowing = true;
+  //   } else {
+  //     isFollowing = false;
+  //   }
+  // });
 
 // //set value
 //     // _user.value = {

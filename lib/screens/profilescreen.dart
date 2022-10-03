@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // // log(snapshot.data.data().toString());
 
             if (snapshot.hasData) {
+              final profilephoto = snapshot.data!.get('profilePhoto');
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -63,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             )),
                         InkWell(
                           onTap: () {
-                            AuthController().signOut();
+                            AuthController().signOut(context);
                           },
                           child: const Icon(
                             Icons.logout_outlined,
@@ -77,13 +79,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     alignment: Alignment.center,
                     child: Stack(
                       children: [
-                        CircleAvatar(
-                          radius: 64,
-                          backgroundColor: Colors.grey,
-                          child: Icon(
-                            Icons.person,
-                            size: size.width * 0.35,
-                            color: Colors.grey.shade400,
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            width: size.width / 3,
+                            height: size.width / 3,
+                            imageUrl: profilephoto,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) => CircleAvatar(
+                              radius: 80,
+                              backgroundColor: Colors.grey,
+                              child: Icon(
+                                Icons.person,
+                                size: size.width * 0.30,
+                                color: Colors.grey.shade400,
+                              ),
+                            ),
                           ),
                         ),
                         Positioned(
@@ -150,63 +163,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            // if (!snapshot.hasData || snapshot.hasError) {
-            //   return const Center(
-            //     child: CircularProgressIndicator(),
-            //   );
-            // } else {}
           }),
-      // body: FutureBuilder<DocumentSnapshot>(
-      //   future: FirebaseFirestore.instance
-      //       .collection('users')
-      //       .doc(widget.uid)
-      //       .get(),
-      //   builder:
-      //       (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-      //     if (snapshot.hasError) {
-      //       return Text('Something went wrong');
-      //     }
-
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       return Text("Loading");
-      //     }
-
-      //     // return ListView(
-      //     //   children: snapshot.data!.docs.map((DocumentSnapshot document) {
-      //     //     Map<String, dynamic> data =
-      //     //         document.data()! as Map<String, dynamic>;
-      //     //     log(data.toString());
-      //     //     return ListTile(
-      //     //       // data['company']
-      //     //       title: Text('data.toString()'),
-      //     //       subtitle: Text('yhug'),
-      //     //     );
-      //     //   }).toList(),
-      //     // );
-      //     // return ListView(
-      //     //   children: snapshot.data!.map((DocumentSnapshot document) {
-      //     // final data = SignUpModel.fromSnap(snapshot.data!);
-      //     //     log(data.toString());
-      //     //     return ListTile(
-      //     //       // data['company']
-      //     //       title: Text('data.toString()'),
-      //     //       subtitle: Text('yhug'),
-      //     //     );
-      //     //   }).toList(),
-      //     // );
-
-      //     log(snapshot.data!.id.toString());
-      //     log(snapshot.data!.toString());
-      //     // log(snapshot.data!.reference.toString());
-      //     return Text(snapshot.data!.toString());
-      //   },
-      // ),
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
         onPressed: () {
-          AuthController().signOut();
-          Navigator.pushNamed(context, '/HomeScreen');
+          // Navigator.pushNamed(context, '/HomeScreen');
         },
         child: const Icon(
           Icons.mic,

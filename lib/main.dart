@@ -1,13 +1,9 @@
-import 'dart:developer';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:jaja/screens/auth/signin.dart';
 import 'package:jaja/screens/auth/signup.dart';
 import 'package:jaja/screens/profilescreen.dart';
 import 'package:jaja/screens/searchuser.dart';
-import 'package:jaja/screens/userscreen.dart';
-import 'package:jaja/services/authservice.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'homescreen.dart';
 
@@ -44,16 +40,16 @@ class _MyAppState extends State<MyApp> {
         // AuthController().getuserData(uid);
       });
 
-      log(islogged.toString());
-      log(uid);
+      // log(islogged.toString());
+      // log(uid);
     } else {
       setState(() {
         islogged = false;
         uid = '';
       });
 
-      log(uid);
-      log(islogged.toString());
+      // log(uid);
+      // log(islogged.toString());
     }
   }
 
@@ -73,7 +69,6 @@ class _MyAppState extends State<MyApp> {
         SignUp.routeName: (context) => const SignUp(),
         ProfileScreen.routeName: (context) => const ProfileScreen(),
         SearchUser.routeName: (context) => const SearchUser(),
-        UserScreen.routeName: (context) => const UserScreen(),
       },
       // home: const SignIn(),
     );

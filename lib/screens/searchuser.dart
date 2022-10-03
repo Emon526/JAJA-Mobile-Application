@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:jaja/screens/userscreen.dart';
 
 class SearchUser extends StatelessWidget {
   static const routeName = "/SearchUserScreen";
@@ -15,6 +16,7 @@ class SearchUser extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final firebaseauth = FirebaseAuth.instance;
     final firestore = FirebaseFirestore.instance;
+    final _searchuserController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -31,96 +33,101 @@ class SearchUser extends StatelessWidget {
           horizontal: 14,
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildSearchBar(
               size: size.width,
-              context: context,
+              ontapprofileimage: () {
+                Navigator.pushNamed(context, '/ProfileScreen');
+              },
+              controller: _searchuserController,
+              uid: firebaseauth.currentUser!.uid,
+              firestore: firestore,
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Text(
-              "Trending",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: StreamBuilder(
-                  stream: firestore.collection('users').snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            final data = snapshot.data!.docs[index];
-                            // log(data.data().toString());
-                            return _buildUserCard(
-                                imageurl: data.get('profilePhoto'),
-                                title:
-                                    '${data.get('firstname')} ${data.get('lastname')}',
-                                follewers: '0',
-                                size: size.width,
-                                onTap: () {
-                                  log(data.get('uid'));
-                                });
-                          });
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    // if (!snapshot.hasData || snapshot.hasError) {
-                    //   return const Center(
-                    //     child: CircularProgressIndicator(),
-                    //   );
-                    // } else {}
-                  }),
-            ),
-            // Expanded(
-            //     child: FirebaseAnimatedList(
-            //   query: databaseref,
-            //   defaultChild: const Center(
-            //     child: CircularProgressIndicator(),
-            //   ),
-            //   itemBuilder: (context, snapshot, animation, index) {
-            //     // log(snapshot.value.toString());
-            //     if (snapshot.value
-            //         .toString()
-            //         .contains(FirebaseAuth.instance.currentUser!.uid)) {
-            //       return SizedBox();
-            //     }
-            //     return _buildUserCard(
-            //       onTap: () {
-            //         Navigator.pushNamed(context, '/UserScreen');
-            //         log('message1');
-            //       },
-            //       title:
-            //           '${snapshot.child('firstname').value} ${snapshot.child('lastname').value} '
-            //               .toString(),
-            //       follewers: '0 Followers',
-            //       imageurl: '${snapshot.child('profilePhoto').value}',
-            //       size: size.width,
-            //     );
-            //   },
-            // )),
+            _searchuserController.text.isEmpty
+                ? _buildTranding(
+                    firestore: firestore,
+                    size: size.width,
+                  )
+                : Text('data'),
           ],
         ),
       ),
     );
   }
 
-  _buildSearchBar({required double size, required BuildContext context}) {
+  _buildTranding({
+    required FirebaseFirestore firestore,
+    required double size,
+  }) {
+    return Expanded(
+      child: StreamBuilder(
+          stream: firestore.collection('users').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    "Trending",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Flexible(
+                    child: ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final data = snapshot.data!.docs[index];
+                          // log(data.data().toString());
+                          return _buildUserCard(
+                              imageurl: data.get('profilePhoto'),
+                              title:
+                                  '${data.get('firstname')} ${data.get('lastname')}',
+                              follewers: '0',
+                              size: size,
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            UserScreen(uid: data.get('uid'))));
+                                log(data.get('uid'));
+                              });
+                        }),
+                  ),
+                ],
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
+    );
+  }
+
+  _buildSearchBar({
+    required double size,
+    required String uid,
+    required Function ontapprofileimage,
+    required TextEditingController controller,
+    required FirebaseFirestore firestore,
+  }) {
     return Row(
       children: [
         Flexible(
           child: TextField(
+            controller: controller,
             autofocus: false,
+            textInputAction: TextInputAction.done,
+            keyboardType: TextInputType.name,
             decoration: InputDecoration(
               labelText: 'Search',
               labelStyle: const TextStyle(
@@ -157,17 +164,41 @@ class SearchUser extends StatelessWidget {
         ),
         InkWell(
           onTap: () {
-            Navigator.pushNamed(context, '/ProfileScreen');
+            ontapprofileimage();
           },
-          child: CircleAvatar(
-            radius: 24,
-            backgroundColor: Colors.grey,
-            child: Icon(
-              Icons.person,
-              size: size * 0.1,
-              color: Colors.grey.shade400,
-            ),
-          ),
+          child: StreamBuilder(
+              stream: firestore.collection('users').doc(uid).snapshots(),
+              builder: (context, snapshot) {
+                // // log(snapshot.data.data().toString());
+
+                if (snapshot.hasData) {
+                  final profilephoto = snapshot.data!.get('profilePhoto');
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      width: size / 6,
+                      height: size / 6,
+                      imageUrl: profilephoto,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => CircleAvatar(
+                        radius: 80,
+                        backgroundColor: Colors.grey,
+                        child: Icon(
+                          Icons.person,
+                          size: size * 0.14,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
         ),
       ],
     );

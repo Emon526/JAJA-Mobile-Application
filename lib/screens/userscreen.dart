@@ -1,12 +1,21 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jaja/services/authservice.dart';
 
 class UserScreen extends StatelessWidget {
-  static const routeName = "/UserScreen";
-  const UserScreen({super.key});
+  final String uid;
+  // static const routeName = "/UserScreen";
+  const UserScreen({super.key, required this.uid});
 
   @override
   Widget build(BuildContext context) {
+    bool isFollowing = false;
+    final firebaseauth = FirebaseAuth.instance;
+    final firestore = FirebaseFirestore.instance;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -26,85 +35,124 @@ class UserScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                color: Colors.grey.shade400,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      width: size.width / 4,
-                      height: size.width / 4,
-                      imageUrl:
-                          'https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg',
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => CircleAvatar(
-                        radius: 80,
-                        backgroundColor: Colors.grey,
-                        child: Icon(
-                          Icons.person,
-                          size: size.width * 0.1,
-                          color: Colors.grey.shade400,
+            StreamBuilder(
+                stream: firestore.collection('users').doc(uid).snapshots(),
+                builder: (context, snapshot) {
+                  // // log(snapshot.data.data().toString());
+                  firestore
+                      .collection('users')
+                      .doc(firebaseauth.currentUser!.uid)
+                      .collection('followers')
+                      .doc(uid)
+                      .get()
+                      .then((value) {
+                    if (value.exists) {
+                      isFollowing = true;
+                      log(isFollowing.toString());
+                    } else {
+                      isFollowing = false;
+                      log(isFollowing.toString());
+                    }
+                  });
+                  if (snapshot.hasData) {
+                    final profilephoto = snapshot.data!.get('profilePhoto');
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            color: Colors.grey.shade400,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  width: size.width / 4,
+                                  height: size.width / 4,
+                                  imageUrl: profilephoto,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      CircleAvatar(
+                                    radius: 80,
+                                    backgroundColor: Colors.grey,
+                                    child: Icon(
+                                      Icons.person,
+                                      size: size.width * 0.1,
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                )),
+                          ),
                         ),
-                      ),
-                    )),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Text(
-              // '${user.firstname} ${user.lastname}',
-              'Asraful Islam',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              '0 Followers',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Material(
-              borderRadius: BorderRadius.circular(5),
-              color: const Color(0xff7BF946),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
-                child: Text(
-                  'Follow',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Asraful's Recordings",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          '${snapshot.data!.get('firstname')} ${snapshot.data!.get('lastname')}',
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text(
+                          '0 Followers',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            log('follow');
+                            // AuthController().followuser(
+                            //     followeruid: snapshot.data!.get('uid'));
+                            // isFollowing ?
+                          },
+                          child: Material(
+                            borderRadius: BorderRadius.circular(5),
+                            color: const Color(0xff7BF946),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
+                              ),
+                              child: Text(
+                                isFollowing ? 'UnFollow' : 'Follow',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "${snapshot.data!.get('firstname')}'s Recordings",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
           ],
         ),
       ),
@@ -112,7 +160,7 @@ class UserScreen extends StatelessWidget {
         backgroundColor: const Color(0xff7BF946),
         onPressed: () {
           // AuthController().signOut();
-          Navigator.pushNamed(context, '/HomeScreen');
+          Navigator.pushReplacementNamed(context, '/SearchUserScreen');
         },
         child: const Icon(
           Icons.home,
