@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -103,6 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           left: 80,
                           child: IconButton(
                             onPressed: () => {
+                              log('Pick Image and upload choosed one')
                               // photocontroller.pickImage()
                             },
                             icon: const Icon(
@@ -149,7 +152,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Padding(
                     padding: EdgeInsets.all(20.0),
                     child: Text(
-                      // snapshot.data!.get('email'),
                       'Your Recordings',
                       style: TextStyle(
                         fontSize: 20,
@@ -169,6 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: Colors.green,
         onPressed: () {
           // Navigator.pushNamed(context, '/HomeScreen');
+          log('upload or record audio');
         },
         child: const Icon(
           Icons.mic,
