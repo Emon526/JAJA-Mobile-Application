@@ -1,9 +1,14 @@
 import 'dart:developer';
-
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
+import 'package:image_picker/image_picker.dart';
+
+import '../models/usermodel.dart';
 import '../services/authservice.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -19,6 +24,54 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final firebaseauth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
+  final firebasestorage = FirebaseStorage.instance;
+  File? _image;
+
+  Future selectfile() async {
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        log('No image Selected');
+      }
+    });
+
+    //   // Upload file
+    final ref = firebasestorage
+        .ref('profileimages')
+        .child(firebaseauth.currentUser!.uid);
+    UploadTask uploadTask = ref.putFile(_image!.absolute);
+
+    await Future.value(uploadTask);
+    var imageurl = await ref.getDownloadURL();
+
+    final followersdata = await firestore
+        .collection('users')
+        .doc(firebaseauth.currentUser!.uid)
+        .get();
+
+    UserModel user = UserModel(
+      firstname: followersdata.get('firstname'),
+      lastname: followersdata.get('lastname'),
+      email: followersdata.get('email'),
+      phone: followersdata.get('phone'),
+      password: followersdata.get('password'),
+      uid: followersdata.get('uid'),
+      profilePhoto: imageurl,
+      followers: followersdata.get('followers'),
+      following: followersdata.get('following'),
+    );
+    await firestore
+        .collection('users')
+        .doc(firebaseauth.currentUser!.uid)
+        .set(user.toJson());
+    // log(imageurl.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -82,31 +135,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(100),
-                          child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            width: size.width / 3,
-                            height: size.width / 3,
-                            imageUrl: profilephoto,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) => CircleAvatar(
-                              radius: 80,
-                              backgroundColor: Colors.grey,
-                              child: Icon(
-                                Icons.person,
-                                size: size.width * 0.30,
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                          ),
+                          child: _image != null
+                              ? Image.file(
+                                  _image!.absolute,
+                                  width: size.width / 3,
+                                  height: size.width / 3,
+                                  fit: BoxFit.cover,
+                                )
+                              : CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  width: size.width / 3,
+                                  height: size.width / 3,
+                                  imageUrl: profilephoto,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      CircleAvatar(
+                                    radius: 80,
+                                    backgroundColor: Colors.grey,
+                                    child: Icon(
+                                      Icons.person,
+                                      size: size.width * 0.30,
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                ),
                         ),
                         Positioned(
                           bottom: -10,
                           left: 80,
                           child: IconButton(
                             onPressed: () => {
-                              log('Pick Image and upload choosed one')
-                              // photocontroller.pickImage()
+                              log('Pick Image and upload choosed one'),
+                              selectfile(),
                             },
                             icon: const Icon(
                               Icons.add_a_photo,
