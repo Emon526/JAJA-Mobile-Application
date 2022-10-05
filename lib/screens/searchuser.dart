@@ -24,8 +24,8 @@ class _SearchUserState extends State<SearchUser> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: const Color(0xff40039B),
         elevation: 0,
@@ -48,7 +48,6 @@ class _SearchUserState extends State<SearchUser> {
               },
               controller: searchuserController,
               uid: firebaseauth.currentUser!.uid,
-              firestore: firestore,
             ),
             searchuserController.text.isNotEmpty
                 ? _buildSearchResult(
@@ -141,7 +140,6 @@ class _SearchUserState extends State<SearchUser> {
     required String uid,
     required Function ontapprofileimage,
     required TextEditingController controller,
-    required FirebaseFirestore firestore,
   }) {
     return Row(
       children: [
@@ -187,6 +185,8 @@ class _SearchUserState extends State<SearchUser> {
         SizedBox(
           width: size * 0.02,
         ),
+
+        // profile icon
         InkWell(
           onTap: () {
             ontapprofileimage();
