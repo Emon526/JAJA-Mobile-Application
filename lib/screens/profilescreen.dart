@@ -7,7 +7,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/usermodel.dart';
+import '../recorder/views/cloud_record_list_view.dart';
+import '../recorder/views/feature_buttons_view.dart';
+import '../services/audiorecorder.dart';
 import '../services/authservice.dart';
+import '../widget/timewidget.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({
@@ -20,9 +24,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  List<Reference> references = [];
   final firebaseauth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
   final firebasestorage = FirebaseStorage.instance;
+  bool showtimer = false;
   File? _image;
 
   Future selectfile() async {
@@ -62,12 +68,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
       profilePhoto: imageurl,
       followers: followersdata.get('followers'),
       following: followersdata.get('following'),
+      recordings: followersdata.get('recordings'),
     );
     await firestore
         .collection('users')
         .doc(firebaseauth.currentUser!.uid)
         .set(user.toJson());
     // log(imageurl.toString());
+  }
+
+  // final timeController = TimeController();
+  // final recorder = SoundRecorder();
+
+  @override
+  void initState() {
+    // recorder.init();
+    _onUploadComplete();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // recorder.dispose();
+    super.dispose();
   }
 
   @override
@@ -93,6 +116,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               final profilephoto = snapshot.data!.get('profilePhoto');
               final List followers = snapshot.data!.get('followers');
               final List following = snapshot.data!.get('following');
+              final List recordings = snapshot.data!.get('recordings');
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -195,7 +220,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text('0 Recordings'),
+                      Text(
+                        '${recordings.length} Recordings',
+                      ),
                       Text(
                         '${followers.length} Followers',
                       ),
@@ -218,6 +245,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
+                  Expanded(
+                    // flex: 4,
+                    child: references.isEmpty
+                        ? const Center(
+                            child: Text('No File uploaded yet'),
+                          )
+                        : CloudRecordListView(
+                            references: references,
+                          ),
+                  ),
                 ],
               );
             } else {
@@ -226,17 +263,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             }
           }),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
-        onPressed: () {
-          // Navigator.pushNamed(context, '/HomeScreen');
-          log('upload or record audio');
-        },
-        child: const Icon(
-          Icons.mic,
-          color: Colors.white,
-        ),
+      floatingActionButton: FeatureButtonsView(
+        onUploadComplete: _onUploadComplete,
       ),
     );
+  }
+
+  Future<void> _onUploadComplete() async {
+    // FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+    ListResult listResult = await firebasestorage
+        .ref('recordings')
+        .child(firebaseauth.currentUser!.uid)
+        .list();
+
+    setState(() {
+      references = listResult.items;
+    });
   }
 }

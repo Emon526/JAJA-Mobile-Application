@@ -2,8 +2,10 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+import '../recorder/views/cloud_record_list_view.dart';
 import '../services/authservice.dart';
 
 class UserScreen extends StatefulWidget {
@@ -15,10 +17,17 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
+  List<Reference> references = [];
   bool isFollowing = false;
   final firebaseauth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
   final searchuserController = TextEditingController();
+  @override
+  void initState() {
+    _onUploadComplete(uid: widget.uid);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -157,6 +166,16 @@ class _UserScreenState extends State<UserScreen> {
                                     ),
                                   ),
                                 ),
+                                Container(
+                                  height: size.height * 0.4,
+                                  child: references.isEmpty
+                                      ? const Center(
+                                          child: Text('No File uploaded yet'),
+                                        )
+                                      : CloudRecordListView(
+                                          references: references,
+                                        ),
+                                )
                               ],
                             );
                           } else {
@@ -351,5 +370,15 @@ class _UserScreenState extends State<UserScreen> {
         },
       ),
     );
+  }
+
+  Future<void> _onUploadComplete({required String uid}) async {
+    FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+    ListResult listResult =
+        await firebaseStorage.ref('recordings').child(uid).list();
+
+    setState(() {
+      references = listResult.items;
+    });
   }
 }

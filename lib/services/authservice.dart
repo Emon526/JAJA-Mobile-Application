@@ -67,16 +67,16 @@ class AuthController {
         );
 
         UserModel user = UserModel(
-          firstname: firstname,
-          lastname: lastname,
-          email: email,
-          phone: phone,
-          password: password,
-          uid: cred.user!.uid,
-          profilePhoto: '',
-          followers: [],
-          following: [],
-        );
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            phone: phone,
+            password: password,
+            uid: cred.user!.uid,
+            profilePhoto: '',
+            followers: [],
+            following: [],
+            recordings: []);
         await firestore
             .collection('users')
             .doc(cred.user!.uid)
@@ -105,16 +105,16 @@ class AuthController {
     followers.add(firebaseAuth.currentUser!.uid);
 
     UserModel user = UserModel(
-      firstname: followersdata.get('firstname'),
-      lastname: followersdata.get('lastname'),
-      email: followersdata.get('email'),
-      phone: followersdata.get('phone'),
-      password: followersdata.get('password'),
-      uid: followersdata.get('uid'),
-      profilePhoto: followersdata.get('profilePhoto'),
-      followers: followers,
-      following: followersdata.get('following'),
-    );
+        firstname: followersdata.get('firstname'),
+        lastname: followersdata.get('lastname'),
+        email: followersdata.get('email'),
+        phone: followersdata.get('phone'),
+        password: followersdata.get('password'),
+        uid: followersdata.get('uid'),
+        profilePhoto: followersdata.get('profilePhoto'),
+        followers: followers,
+        following: followersdata.get('following'),
+        recordings: followersdata.get('recordings'));
     await firestore.collection('users').doc(followeruid).set(user.toJson());
     // log(user.toJson().toString());
 
@@ -139,6 +139,7 @@ class AuthController {
       profilePhoto: followingdata.get('profilePhoto'),
       followers: followingdata.get('followers'),
       following: following,
+      recordings: followingdata.get('recordings'),
     );
 
     await firestore
@@ -165,6 +166,7 @@ class AuthController {
       profilePhoto: followersdata.get('profilePhoto'),
       followers: followers,
       following: followersdata.get('following'),
+      recordings: followersdata.get('recordings'),
     );
     await firestore.collection('users').doc(followeruid).set(user.toJson());
     // log(user.toJson().toString());
@@ -190,6 +192,7 @@ class AuthController {
       profilePhoto: followingdata.get('profilePhoto'),
       followers: followingdata.get('followers'),
       following: following,
+      recordings: followingdata.get('recordings'),
     );
 
     await firestore

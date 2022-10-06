@@ -8,6 +8,7 @@ class UserModel {
   String? profilePhoto;
   List? following;
   List? followers;
+  List? recordings;
 
   UserModel({
     required this.firstname,
@@ -19,6 +20,7 @@ class UserModel {
     required this.profilePhoto,
     required this.followers,
     required this.following,
+    required this.recordings,
   });
   Map<String, dynamic> toJson() => {
         "firstname": firstname,
@@ -30,5 +32,6 @@ class UserModel {
         "profilePhoto": profilePhoto,
         "followers": followers,
         "following": following,
+        "recordings": recordings,
       };
 }
