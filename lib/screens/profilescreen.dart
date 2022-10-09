@@ -9,9 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../models/usermodel.dart';
 import '../recorder/views/cloud_record_list_view.dart';
 import '../recorder/views/feature_buttons_view.dart';
-import '../services/audiorecorder.dart';
 import '../services/authservice.dart';
-import '../widget/timewidget.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({
@@ -252,6 +250,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Text('No File uploaded yet'),
                           )
                         : CloudRecordListView(
+                            ondeleteComplete: _onUploadComplete,
+                            uid: firebaseauth.currentUser!.uid,
                             references: references,
                           ),
                   ),

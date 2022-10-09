@@ -173,6 +173,8 @@ class _UserScreenState extends State<UserScreen> {
                                           child: Text('No File uploaded yet'),
                                         )
                                       : CloudRecordListView(
+                                          ondeleteComplete: () {},
+                                          uid: widget.uid,
                                           references: references,
                                         ),
                                 )
