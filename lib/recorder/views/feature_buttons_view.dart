@@ -93,7 +93,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
       _isUploading = true;
     });
     try {
-      final ref = await firebaseStorage
+      final ref = firebaseStorage
           .ref('recordings')
           .child(firebaseAuth.currentUser!.uid)
           .child(_filePath.substring(
@@ -188,10 +188,8 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
 
     if (hasRecordingPermission ?? false) {
       Directory directory = await getApplicationDocumentsDirectory();
-      String filepath = directory.path +
-          '/' +
-          DateTime.now().millisecondsSinceEpoch.toString() +
-          '.aac';
+      String filepath =
+          '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.aac';
       _audioRecorder =
           FlutterAudioRecorder2(filepath, audioFormat: AudioFormat.AAC);
       await _audioRecorder.initialized;
