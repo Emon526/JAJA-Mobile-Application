@@ -41,17 +41,6 @@ class _SignUpState extends State<SignUp> {
   }
 
   @override
-  void initState() {
-    _firstnameController.text = 'Asraful';
-    _lastnameController.text = 'Islam';
-    _emailController.text = 'emn@gmail.com';
-    _phonenumberController.text = "01849945526";
-    _passwordController.text = '123456';
-    _confirmpasswordController.text = '123456';
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(

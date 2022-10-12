@@ -1,16 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jaja/screens/auth/forgotpassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'homescreen.dart';
 import 'screens/auth/signin.dart';
 import 'screens/auth/signup.dart';
 import 'screens/profilescreen.dart';
 import 'screens/searchuser.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   runApp(const MyApp());
 }
@@ -70,6 +75,7 @@ class _MyAppState extends State<MyApp> {
         SignUp.routeName: (context) => const SignUp(),
         ProfileScreen.routeName: (context) => const ProfileScreen(),
         SearchUser.routeName: (context) => const SearchUser(),
+        ForgotPassword.routeName: (context) => const ForgotPassword(),
       },
       // home: const SignIn(),
     );

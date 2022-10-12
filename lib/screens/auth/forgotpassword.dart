@@ -1,30 +1,26 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import '../../services/authservice.dart';
+import 'package:jaja/services/authservice.dart';
 import '../../widget/authbuttons.dart';
-import '../../widget/inputfield.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
-  static const routeName = "/SignInScreen";
+class ForgotPassword extends StatefulWidget {
+  const ForgotPassword({super.key});
+  static const routeName = "/ForgotPassword";
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
-class _SignInState extends State<SignIn> {
+class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  bool passvisibility = true;
   final GlobalKey<FormState> _loginformKey = GlobalKey<FormState>();
 
   void validateAndLogin() async {
     final FormState form = _loginformKey.currentState!;
     if (form.validate()) {
-      AuthController().loginUser(
-        context: context,
+      AuthController().resetPassword(
         email: _emailController.text,
-        password: _passwordController.text,
+        context: context,
       );
     } else {
       log('Form is invalid');
@@ -32,16 +28,9 @@ class _SignInState extends State<SignIn> {
   }
 
   @override
-  void initState() {
-    _emailController.text = 'emn@gmail.com';
-    _passwordController.text = '123456';
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: const Color(0xff90fc63),
       appBar: AppBar(
@@ -51,6 +40,22 @@ class _SignInState extends State<SignIn> {
         elevation: 0,
         title: const Text(
           'JAJA',
+        ),
+        leading: TextButton(
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/SignInScreen');
+          },
+          // child: const Text(
+          //   "Go for Sign in",
+          //   style: TextStyle(
+          //     color: Colors.red,
+          //     fontSize: 16,
+          //   ),
+          // ),
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -87,7 +92,7 @@ class _SignInState extends State<SignIn> {
                   height: 60,
                 ),
                 const Text(
-                  'SIGN IN',
+                  'Forgot Password',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -96,14 +101,6 @@ class _SignInState extends State<SignIn> {
                 const SizedBox(
                   height: 10,
                 ),
-                // InputField(
-                //   labelText: 'Email',
-                //   validatortext: "Enter Email Address",
-                //   inputType: TextInputType.emailAddress,
-                //   inputAction: TextInputAction.next,
-                //   controller: _emailController,
-                //   icon: Icons.person_outline,
-                // ),
                 TextFormField(
                   controller: _emailController,
                   cursorColor: const Color(0xff40039B),
@@ -146,79 +143,25 @@ class _SignInState extends State<SignIn> {
                 const SizedBox(
                   height: 20,
                 ),
-                InputField(
-                  validatortext: 'Enter Password',
-                  inputType: TextInputType.visiblePassword,
-                  suffixonTap: () {
-                    setState(() {
-                      passvisibility = !passvisibility;
-                    });
-                  },
-                  inputAction: TextInputAction.done,
-                  controller: _passwordController,
-                  icon: Icons.lock,
-                  labelText: 'Password',
-                  isObsecured: passvisibility,
-                  isPass: true,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: AuthButton(
                     ontap: () {
                       validateAndLogin();
                     },
-                    buttonText: "LOG IN",
+                    buttonText: "Send Email",
                     width: size.width,
                   ),
                 ),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, '/ForgotPassword');
-                    },
-                    child: const Text(
-                      "Forgot Password??",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Doesn't have an account?",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, '/SignUpScreen');
-                      },
-                      child: const Text(
-                        "Sign up",
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
               ],
             ),
           ),
         ),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   child: Icon(Icons.abc),
+      // ),
     );
   }
 }

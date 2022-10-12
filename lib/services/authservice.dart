@@ -201,4 +201,20 @@ class AuthController {
         .set(currentuser.toJson());
     // log(currentuser.toJson().toString());
   }
+
+  resetPassword({required String email, required BuildContext context}) {
+    try {
+      firebaseAuth.sendPasswordResetEmail(email: email);
+      final snackbar = SnackBar(
+        duration: Duration(seconds: 8),
+        content:
+            Text("Email sent.Please check Inbox.Don't forgot to check spam"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      Navigator.pushNamed(context, '/SignInScreen');
+    } catch (e) {
+      final snackbar = SnackBar(content: Text(e.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    }
+  }
 }

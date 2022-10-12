@@ -30,6 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   File? _image;
 
   Future selectfile() async {
+    log('vfd');
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 50,
@@ -37,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
+        log('vfd');
       } else {
         log('No image Selected');
       }

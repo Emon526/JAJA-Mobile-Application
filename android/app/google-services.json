@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "303909345121",
+    "firebase_url": "https://jaja-79a0d-default-rtdb.firebaseio.com",
     "project_id": "jaja-79a0d",
     "storage_bucket": "jaja-79a0d.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "303909345121-b1miop4t315kts80keoacj84i40nr95d.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "303909345121-qeaivtip89fk7ue782gl0mddrpkjf53v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.jaja"
+              }
             }
           ]
         }

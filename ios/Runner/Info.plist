@@ -49,12 +49,20 @@
 <string>To capture profile photo please grant  camera access</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 <string>App need to access photo lib for profile images</string>
-
-
+<key>NSMicrophoneUsageDescription</key>
+<string>App need to access microphone for audio recording</string>
 
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsLocalNetworking</key>
+    <true/>
+</dict>
+
 </dict>
 </plist>

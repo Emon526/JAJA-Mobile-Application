@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -64,6 +66,7 @@ class _CloudRecordListViewState extends State<CloudRecordListView> {
 
   Future<void> _onListTileDeleteButtonPressed(int index) async {
     await widget.references.elementAt(index).delete();
+    log(widget.references.elementAt(index).toString());
     widget.ondeleteComplete();
   }
 
