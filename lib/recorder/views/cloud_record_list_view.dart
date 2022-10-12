@@ -1,9 +1,9 @@
-import 'dart:developer';
-
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import '../../models/usermodel.dart';
 
 class CloudRecordListView extends StatefulWidget {
   final Function ondeleteComplete;
@@ -25,6 +25,7 @@ class _CloudRecordListViewState extends State<CloudRecordListView> {
   late AudioPlayer audioPlayer;
   int? selectedIndex;
   final firebaseauth = FirebaseAuth.instance;
+  var firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -42,31 +43,13 @@ class _CloudRecordListViewState extends State<CloudRecordListView> {
         return listcard(
           index: index,
         );
-        // return ListTile(
-        //   title: Text(widget.references.elementAt(index).name),
-        //   leading: widget.uid == firebaseauth.currentUser!.uid
-        //       ? IconButton(
-        //           onPressed: () => _onListTileDeleteButtonPressed(index),
-        //           icon: const Icon(Icons.delete),
-        //         )
-        //       : SizedBox(
-        //           width: 0,
-        //           height: 0,
-        //         ),
-        //   trailing: IconButton(
-        //     icon: selectedIndex == index
-        //         ? const Icon(Icons.pause)
-        //         : const Icon(Icons.play_arrow),
-        //     onPressed: () => _onListTilePlayButtonPressed(index),
-        //   ),
-        // );
       },
     );
   }
 
   Future<void> _onListTileDeleteButtonPressed(int index) async {
     await widget.references.elementAt(index).delete();
-    log(widget.references.elementAt(index).toString());
+    _updaterecordingData(index: index);
     widget.ondeleteComplete();
   }
 
@@ -105,5 +88,46 @@ class _CloudRecordListViewState extends State<CloudRecordListView> {
         ],
       ),
     );
+  }
+
+  Future<void> _updaterecordingData({required int index}) async {
+    var firebaseAuth = FirebaseAuth.instance;
+
+    try {
+      final followingdata = await firestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .get();
+
+      List recording = followingdata.get('recordings');
+      recording.removeAt(index);
+
+      UserModel currentuser = UserModel(
+        firstname: followingdata.get('firstname'),
+        lastname: followingdata.get('lastname'),
+        email: followingdata.get('email'),
+        phone: followingdata.get('phone'),
+        password: followingdata.get('password'),
+        uid: followingdata.get('uid'),
+        profilePhoto: followingdata.get('profilePhoto'),
+        followers: followingdata.get('followers'),
+        following: followingdata.get('following'),
+        recordings: recording,
+      );
+
+      await firestore
+          .collection('users')
+          .doc(firebaseAuth.currentUser!.uid)
+          .set(currentuser.toJson());
+
+      setState(() {});
+    } catch (error) {
+      print('Error occured while uplaoding to Firebase ${error.toString()}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error occured while uplaoding'),
+        ),
+      );
+    }
   }
 }

@@ -99,8 +99,10 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
           .child(_filePath.substring(
               _filePath.lastIndexOf('/'), _filePath.length));
       UploadTask uploadTask = ref.putFile(File(_filePath));
+
       await Future.value(uploadTask);
-      var imageurl = await ref.getDownloadURL();
+      // var imageurl = await ref.getDownloadURL();
+      var imageurl = ref.name;
 
       final followingdata = await firestore
           .collection('users')
