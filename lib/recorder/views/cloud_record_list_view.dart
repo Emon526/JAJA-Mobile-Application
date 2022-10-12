@@ -58,10 +58,11 @@ class _CloudRecordListViewState extends State<CloudRecordListView> {
       selectedIndex = index;
     });
 
-    audioPlayer.play(await widget.references.elementAt(index).getDownloadURL(),
-        isLocal: false);
-
-    audioPlayer.onPlayerCompletion.listen((duration) {
+    // audioPlayer.play(await widget.references.elementAt(index).getDownloadURL(),
+    //     isLocal: false);
+    audioPlayer.play(
+        UrlSource(await widget.references.elementAt(index).getDownloadURL()));
+    audioPlayer.onPlayerComplete.listen((duration) {
       setState(() {
         selectedIndex = -1;
       });

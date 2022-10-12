@@ -171,8 +171,9 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
     if (!_isPlaying) {
       _isPlaying = true;
 
-      _audioPlayer.play(_filePath, isLocal: true);
-      _audioPlayer.onPlayerCompletion.listen((duration) {
+      // _audioPlayer.play(_filePath, isLocal: true);
+      _audioPlayer.play(UrlSource(_filePath));
+      _audioPlayer.onPlayerComplete.listen((duration) {
         setState(() {
           _isPlaying = false;
         });
