@@ -25,7 +25,6 @@ A new Flutter Record Sharing project.
 - image_picker: [link](https://pub.dev/packages/image_picker)
 - flutter_sound_lite: [link](https://pub.dev/packages/flutter_sound_lite)
 - permission_handler: [link](https://pub.dev/packages/permission_handler)
-- flutter_audio_recorder2: [link](https://pub.dev/packages/flutter_audio_recorder2)
 - path_provider: [link](https://pub.dev/packages/path_provider)
 - audioplayers: [link](https://pub.dev/packages/audioplayers)
 
