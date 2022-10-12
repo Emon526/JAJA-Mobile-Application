@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:jaja/services/authservice.dart';
+import '../../services/authservice.dart';
 import '../../widget/authbuttons.dart';
 
 class ForgotPassword extends StatefulWidget {

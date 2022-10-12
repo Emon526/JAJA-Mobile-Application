@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jaja/screens/auth/forgotpassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'homescreen.dart';
+import 'screens/auth/forgotpassword.dart';
 import 'screens/auth/signin.dart';
 import 'screens/auth/signup.dart';
 import 'screens/profilescreen.dart';
@@ -42,19 +42,12 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         islogged = true;
         uid = userId;
-        // AuthController().getuserData(uid);
       });
-
-      // log(islogged.toString());
-      // log(uid);
     } else {
       setState(() {
         islogged = false;
         uid = '';
       });
-
-      // log(uid);
-      // log(islogged.toString());
     }
   }
 
@@ -67,7 +60,6 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       home: islogged ? const SearchUser() : const HomeScreen(),
-
       routes: {
         HomeScreen.routeName: (context) => const HomeScreen(),
         SignIn.routeName: (context) => const SignIn(),
@@ -76,7 +68,6 @@ class _MyAppState extends State<MyApp> {
         SearchUser.routeName: (context) => const SearchUser(),
         ForgotPassword.routeName: (context) => const ForgotPassword(),
       },
-      // home: const SignIn(),
     );
   }
 }

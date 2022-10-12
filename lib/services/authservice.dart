@@ -205,7 +205,7 @@ class AuthController {
   resetPassword({required String email, required BuildContext context}) {
     try {
       firebaseAuth.sendPasswordResetEmail(email: email);
-      final snackbar = SnackBar(
+      const snackbar = SnackBar(
         duration: Duration(seconds: 8),
         content:
             Text("Email sent.Please check Inbox.Don't forgot to check spam"),

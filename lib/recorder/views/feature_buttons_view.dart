@@ -1,14 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
+import 'package:flutter_sound_lite/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 import '../../models/usermodel.dart';
 
 class FeatureButtonsView extends StatefulWidget {
@@ -32,7 +31,9 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
   var firestore = FirebaseFirestore.instance;
   var firebaseAuth = FirebaseAuth.instance;
 
-  late FlutterAudioRecorder2 _audioRecorder;
+  // late FlutterAudioRecorder2 _audioRecorder;
+
+  FlutterSoundRecorder? _audioRecorder;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
     _isRecorded = false;
     _isRecording = false;
     _audioPlayer = AudioPlayer();
+    _audioRecorder = FlutterSoundRecorder();
   }
 
   @override
@@ -155,7 +157,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
 
   Future<void> _onRecordButtonPressed() async {
     if (_isRecording) {
-      _audioRecorder.stop();
+      _audioRecorder!.stopRecorder();
       _isRecording = false;
       _isRecorded = true;
     } else {
@@ -186,17 +188,17 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
   }
 
   Future<void> _startRecording() async {
-    final bool? hasRecordingPermission =
-        await FlutterAudioRecorder2.hasPermissions;
-
-    if (hasRecordingPermission ?? false) {
+    final status = await Permission.microphone.request();
+    if (status != PermissionStatus.granted) {
+      throw RecordingPermissionException('Microphone Permission denied');
+    }
+    if (status.isGranted) {
       Directory directory = await getApplicationDocumentsDirectory();
       String filepath =
           '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.aac';
-      _audioRecorder =
-          FlutterAudioRecorder2(filepath, audioFormat: AudioFormat.AAC);
-      await _audioRecorder.initialized;
-      _audioRecorder.start();
+
+      await _audioRecorder!.openAudioSession();
+      await _audioRecorder!.startRecorder(toFile: filepath);
       _filePath = filepath;
       setState(() {});
     } else {

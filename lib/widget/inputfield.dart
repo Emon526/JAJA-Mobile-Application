@@ -21,7 +21,6 @@ class InputField extends StatelessWidget {
     this.isPass = false,
     required this.icon,
     required this.controller,
-    // required this.onchanged,
     required this.validatortext,
     this.suffixonTap,
     required this.inputType,

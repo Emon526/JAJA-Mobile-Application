@@ -40,11 +40,10 @@ dependencies:
   cloud_firestore: ^3.5.1
   firebase_storage: ^10.3.11
   shared_preferences: ^2.0.15
-  cached_network_image: ^3.2.2
+  cached_network_image: ^3.2.2 
   image_picker: ^0.8.6
   flutter_sound_lite: ^8.5.0
   permission_handler: ^10.1.0
-  flutter_audio_recorder2: ^0.0.2
   audioplayers: ^1.1.1
   path_provider: ^2.0.11
 
