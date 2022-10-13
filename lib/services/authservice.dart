@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,10 @@ class AuthController {
 
         // log(firebaseAuth.currentUser!.uid);
       } else {
-        log("Input all fill");
+        const snackbar = SnackBar(
+          content: Text("Input All Field"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
       }
     } catch (e) {
       final snackbar = SnackBar(content: Text(e.toString()));
@@ -89,7 +92,10 @@ class AuthController {
           Navigator.pushNamed(context, '/SignInScreen');
         });
       } else {
-        log("Input all fill");
+        const snackbar = SnackBar(
+          content: Text("Input All Field"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
       }
     } catch (e) {
       final snackbar = SnackBar(content: Text(e.toString()));

@@ -36,7 +36,10 @@ class _SignUpState extends State<SignUp> {
           lastname: _lastnameController.text,
           phone: _phonenumberController.text);
     } else {
-      log('Form is invalid');
+      const snackbar = SnackBar(
+        content: Text("Invalid Information"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
     }
   }
 

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,8 +6,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound_lite/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../../models/usermodel.dart';
+import '../../services/permissions.dart';
 
 class FeatureButtonsView extends StatefulWidget {
   final Function onUploadComplete;
@@ -24,14 +23,12 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
   late bool _isPlaying;
   late bool _isUploading;
   late bool _isRecorded;
-  late bool _isRecording;
+  // late bool _isRecording;
 
   late AudioPlayer _audioPlayer;
   late String _filePath;
   var firestore = FirebaseFirestore.instance;
   var firebaseAuth = FirebaseAuth.instance;
-
-  // late FlutterAudioRecorder2 _audioRecorder;
 
   FlutterSoundRecorder? _audioRecorder;
 
@@ -41,7 +38,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
     _isPlaying = false;
     _isUploading = false;
     _isRecorded = false;
-    _isRecording = false;
+    // _isRecording = false;
     _audioPlayer = AudioPlayer();
     _audioRecorder = FlutterSoundRecorder();
   }
@@ -84,8 +81,9 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
         : FloatingActionButton(
             backgroundColor: Colors.green,
             onPressed: _onRecordButtonPressed,
-            child:
-                _isRecording ? const Icon(Icons.pause) : const Icon(Icons.mic),
+            child: _audioRecorder!.isRecording && PermissionSettings.isPermit
+                ? const Icon(Icons.pause)
+                : const Icon(Icons.mic),
           );
   }
 
@@ -113,7 +111,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
 
       List recording = followingdata.get('recordings');
       recording.add(imageurl);
-      log(recording.toString());
+      // log(recording.toString());
 
       UserModel currentuser = UserModel(
         firstname: followingdata.get('firstname'),
@@ -145,6 +143,7 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
     } finally {
       setState(() {
         _isUploading = false;
+        _isRecorded = false;
       });
     }
   }
@@ -156,15 +155,15 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
   }
 
   Future<void> _onRecordButtonPressed() async {
-    if (_isRecording) {
+    if (_audioRecorder!.isRecording) {
       _audioRecorder!.stopRecorder();
-      _isRecording = false;
+      // _isRecording = false;
       _isRecorded = true;
     } else {
       _isRecorded = false;
-      _isRecording = true;
+      // _isRecording = true;
 
-      await _startRecording();
+      await _startRecording(context: context);
     }
     setState(() {});
   }
@@ -173,8 +172,10 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
     if (!_isPlaying) {
       _isPlaying = true;
 
-      // _audioPlayer.play(_filePath, isLocal: true);
-      _audioPlayer.play(UrlSource(_filePath));
+      _audioPlayer.play(
+        DeviceFileSource(_filePath),
+      );
+
       _audioPlayer.onPlayerComplete.listen((duration) {
         setState(() {
           _isPlaying = false;
@@ -187,12 +188,12 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
     setState(() {});
   }
 
-  Future<void> _startRecording() async {
-    final status = await Permission.microphone.request();
-    if (status != PermissionStatus.granted) {
-      throw RecordingPermissionException('Microphone Permission denied');
-    }
-    if (status.isGranted) {
+  Future<void> _startRecording({required BuildContext context}) async {
+    // final status = await Permission.microphone.request();
+    final status = PermissionSettings.isPermit;
+    // log(status.toString());
+
+    if (status) {
       Directory directory = await getApplicationDocumentsDirectory();
       String filepath =
           '${directory.path}/${DateTime.now().millisecondsSinceEpoch}.aac';
@@ -202,8 +203,13 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
       _filePath = filepath;
       setState(() {});
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Center(child: Text('Please enable recording permission'))));
+      const snackbar = SnackBar(
+        content: Text("Please enable recording permission"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      await PermissionSettings.promptPermissionSetting();
+      // log('Microphone Permission denied');
+      throw RecordingPermissionException('Microphone Permission denied');
     }
   }
 }

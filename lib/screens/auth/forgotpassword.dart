@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../../services/authservice.dart';
 import '../../widget/authbuttons.dart';
@@ -23,7 +23,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         context: context,
       );
     } else {
-      log('Form is invalid');
+      // log('Form is invalid');
     }
   }
 

@@ -47,8 +47,12 @@
 
 	<key>NSCameraUsageDescription</key>
 <string>To capture profile photo please grant  camera access</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-<string>App need to access photo lib for profile images</string>
+
+
+<key>NSPhotoLibraryUsageDescription</key>
+<string>We need to request your permission to read your photos to load them into the app.
+</string>
+
 <key>NSMicrophoneUsageDescription</key>
 <string>App need to access microphone for audio recording</string>
 

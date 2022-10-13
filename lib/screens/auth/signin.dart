@@ -1,4 +1,4 @@
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../../services/authservice.dart';
 import '../../widget/authbuttons.dart';
@@ -27,7 +27,11 @@ class _SignInState extends State<SignIn> {
         password: _passwordController.text,
       );
     } else {
-      log('Form is invalid');
+      const snackbar = SnackBar(
+        content: Text("Invalid Information"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      // log('Form is invalid');
     }
   }
 

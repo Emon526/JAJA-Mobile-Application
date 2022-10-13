@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -120,7 +118,7 @@ class _SearchUserState extends State<SearchUser> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             UserScreen(uid: data.get('uid'))));
-                                log(data.get('uid'));
+                                // log(data.get('uid'));
                               });
                         }),
                   ),
@@ -298,7 +296,7 @@ class _SearchUserState extends State<SearchUser> {
             )
             .snapshots(),
         builder: (context, snapshot) {
-          log(snapshot.data!.docs.length.toString());
+          // log(snapshot.data!.docs.length.toString());
           if (!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -344,7 +342,7 @@ class _SearchUserState extends State<SearchUser> {
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         UserScreen(uid: data.get('uid'))));
-                            log(data.get('uid'));
+                            // log(data.get('uid'));
                           });
                     }),
               ),

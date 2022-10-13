@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -127,7 +126,7 @@ class _UserScreenState extends State<UserScreen> {
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    log(snapshot.data!.get('uid'));
+                                    // log(snapshot.data!.get('uid'));
                                     isFollowing
                                         ? AuthController().unfollowuser(
                                             followeruid:
@@ -363,7 +362,7 @@ class _UserScreenState extends State<UserScreen> {
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         UserScreen(uid: data.get('uid'))));
-                            log(data.get('uid'));
+                            // log(data.get('uid'));
                           });
                     }),
               ),
