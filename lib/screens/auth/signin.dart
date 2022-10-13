@@ -36,14 +36,6 @@ class _SignInState extends State<SignIn> {
   }
 
   @override
-  void initState() {
-    _emailController.text = 'emn@gmail.com';
-    _passwordController.text = '123456';
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -100,14 +92,6 @@ class _SignInState extends State<SignIn> {
                 const SizedBox(
                   height: 10,
                 ),
-                // InputField(
-                //   labelText: 'Email',
-                //   validatortext: "Enter Email Address",
-                //   inputType: TextInputType.emailAddress,
-                //   inputAction: TextInputAction.next,
-                //   controller: _emailController,
-                //   icon: Icons.person_outline,
-                // ),
                 TextFormField(
                   controller: _emailController,
                   cursorColor: const Color(0xff40039B),

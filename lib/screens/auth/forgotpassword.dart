@@ -45,13 +45,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/SignInScreen');
           },
-          // child: const Text(
-          //   "Go for Sign in",
-          //   style: TextStyle(
-          //     color: Colors.red,
-          //     fontSize: 16,
-          //   ),
-          // ),
           child: const Icon(
             Icons.arrow_back_ios,
             color: Colors.white,
@@ -158,10 +151,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   child: Icon(Icons.abc),
-      // ),
     );
   }
 }

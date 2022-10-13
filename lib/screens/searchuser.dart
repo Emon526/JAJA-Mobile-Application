@@ -14,8 +14,6 @@ class SearchUser extends StatefulWidget {
 }
 
 class _SearchUserState extends State<SearchUser> {
-  // bool isShowUsers = false;
-
   final firebaseauth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
   final searchuserController = TextEditingController();

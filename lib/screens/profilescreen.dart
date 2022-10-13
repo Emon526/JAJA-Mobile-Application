@@ -74,9 +74,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // log(imageurl.toString());
   }
 
-  // final timeController = TimeController();
-  // final recorder = SoundRecorder();
-
   @override
   void initState() {
     // recorder.init();
