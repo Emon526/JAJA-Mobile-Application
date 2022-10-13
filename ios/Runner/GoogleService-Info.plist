@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>303909345121-qeaivtip89fk7ue782gl0mddrpkjf53v.apps.googleusercontent.com</string>
+	<string>303909345121-lsdqb4lih76m1752tjb4409o7tlsfufq.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.303909345121-qeaivtip89fk7ue782gl0mddrpkjf53v</string>
+	<string>com.googleusercontent.apps.303909345121-lsdqb4lih76m1752tjb4409o7tlsfufq</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAemSDXYfqp7Co9td5SQrSaPcMLqdchK5Q</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.jaja</string>
+	<string>com.jaja.voiceshare</string>
 	<key>PROJECT_ID</key>
 	<string>jaja-79a0d</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:303909345121:ios:4177875306a3a471479720</string>
+	<string>1:303909345121:ios:fbed4efc2d7966dd479720</string>
 	<key>DATABASE_URL</key>
 	<string>https://jaja-79a0d-default-rtdb.firebaseio.com</string>
 </dict>
