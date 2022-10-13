@@ -53,6 +53,65 @@ This is a complete functional application that works on both Android and iOS dev
 
 <img src="preview/user.png" alt="drawing" width="350"/>
 
+<br>
+<br>
+
+# Change Application Name & Bundle Id
+## Package - rename: [link]( https://pub.dev/packages/rename)
+
+- Rename Application Name : run rename --appname "Jaja"  
+- Rename Application Bundle ID : run rename --bundleId com.jaja.voiceshare  
 
 
 
+
+# Change App Icon
+## Package - flutter_launcher_icons: [link]( https://pub.dev/packages/flutter_launcher_icons)
+
+- step 1 : Replace the logo.png image with your logo. 
+- step 2 : Change the logo path in pubspec.yaml file 
+- step 3 : Run "flutter pub get" 
+- step 4 : Run "flutter pub run flutter_launcher_icons:main"
+
+
+# Change Splash Screen
+## Package - flutter_native_splash: [link]( https://pub.dev/packages/flutter_native_splash)
+
+- step 1 : Replace the logo.png image with your logo. 
+- step 2 : Change the logo path in pubspec.yaml file 
+- step 3 : Run "flutter pub get" 
+- step 4 : Run "flutter pub run flutter_native_splash:create" 
+
+# Update Pods
+## Run All Commands
+
+<br>
+cd ios
+
+pod cache clean --all
+
+rm Podfile.lock
+
+rm -rf .symlinks/
+
+cd ..
+
+flutter clean
+
+flutter pub get
+
+cd ios
+
+pod update
+
+pod repo update
+
+pod install --repo-update
+
+pod update
+
+pod install
+
+cd ..
+
+## You must be in your application directory to run those commands
