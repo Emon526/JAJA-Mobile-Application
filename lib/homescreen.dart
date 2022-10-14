@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'widget/authbuttons.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,9 +8,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    //  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
     return Scaffold(
-      // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
       backgroundColor: const Color(0xff90fc63),
       appBar: AppBar(
         backgroundColor: const Color(0xff40039B),

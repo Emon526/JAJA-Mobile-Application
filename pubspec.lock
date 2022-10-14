@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.9.0"
+  audio_session:
+    dependency: "direct main"
+    description:
+      name: audio_session
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.10"
   audioplayers:
     dependency: "direct main"
     description:
@@ -321,27 +328,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.7"
-  flutter_sound_lite:
+  flutter_sound:
     dependency: "direct main"
     description:
-      name: flutter_sound_lite
+      name: flutter_sound
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.5.0"
+    version: "9.2.13"
   flutter_sound_platform_interface:
     dependency: transitive
     description:
       name: flutter_sound_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.5.0"
+    version: "9.2.13"
   flutter_sound_web:
     dependency: transitive
     description:
       name: flutter_sound_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.5.0"
+    version: "9.2.13"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -416,7 +423,7 @@ packages:
     source: hosted
     version: "2.6.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       url: "https://pub.dartlang.org"

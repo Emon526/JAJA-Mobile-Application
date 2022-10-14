@@ -120,10 +120,10 @@ class _CloudRecordListViewState extends State<CloudRecordListView> {
 
       setState(() {});
     } catch (error) {
-      print('Error occured while uplaoding to Firebase ${error.toString()}');
+      // print('Error occured while uplaoding to Firebase ${error.toString()}');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Error occured while uplaoding'),
+        SnackBar(
+          content: Text(error.toString()),
         ),
       );
     }
