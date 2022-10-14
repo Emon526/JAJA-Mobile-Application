@@ -3,7 +3,7 @@ class UserModel {
   String? lastname;
   String? email;
   String? phone;
-  String? password;
+  // String? password;
   String? uid;
   String? profilePhoto;
   List? following;
@@ -14,7 +14,6 @@ class UserModel {
     required this.firstname,
     required this.lastname,
     required this.email,
-    required this.password,
     required this.phone,
     required this.uid,
     required this.profilePhoto,
@@ -27,7 +26,6 @@ class UserModel {
         "lastname": lastname,
         "email": email,
         "phone": phone,
-        "password": password,
         "uid": uid,
         "profilePhoto": profilePhoto,
         "followers": followers,

@@ -60,7 +60,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       lastname: followersdata.get('lastname'),
       email: followersdata.get('email'),
       phone: followersdata.get('phone'),
-      password: followersdata.get('password'),
       uid: followersdata.get('uid'),
       profilePhoto: imageurl,
       followers: followersdata.get('followers'),
@@ -76,14 +75,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    // recorder.init();
     _onUploadComplete();
     super.initState();
   }
 
   @override
   void dispose() {
-    // recorder.dispose();
     super.dispose();
   }
 

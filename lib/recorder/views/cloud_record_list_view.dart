@@ -105,7 +105,6 @@ class _CloudRecordListViewState extends State<CloudRecordListView> {
         lastname: followingdata.get('lastname'),
         email: followingdata.get('email'),
         phone: followingdata.get('phone'),
-        password: followingdata.get('password'),
         uid: followingdata.get('uid'),
         profilePhoto: followingdata.get('profilePhoto'),
         followers: followingdata.get('followers'),
