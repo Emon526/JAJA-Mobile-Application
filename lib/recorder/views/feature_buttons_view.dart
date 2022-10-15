@@ -37,7 +37,8 @@ class _FeatureButtonsViewState extends State<FeatureButtonsView> {
   String _recorderTxt = '00:00:00';
 
   Future<void> _initializeExample() async {
-    await _audioRecorder.setSubscriptionDuration(Duration(milliseconds: 10));
+    await _audioRecorder
+        .setSubscriptionDuration(const Duration(milliseconds: 10));
     await initializeDateFormatting();
   }
 

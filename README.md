@@ -27,6 +27,7 @@ A new Flutter Record Sharing project.
 - permission_handler: [link](https://pub.dev/packages/permission_handler)
 - path_provider: [link](https://pub.dev/packages/path_provider)
 - audioplayers: [link](https://pub.dev/packages/audioplayers)
+- webview: [link](https://pub.dev/packages/webview_flutter)
 
 
 

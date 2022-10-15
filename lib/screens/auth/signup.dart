@@ -1,5 +1,8 @@
 import 'dart:developer';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:jaja/widget/webview.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import '../../services/authservice.dart';
 import '../../widget/authbuttons.dart';
 import '../../widget/inputfield.dart';
@@ -159,6 +162,36 @@ class _SignUpState extends State<SignUp> {
                 const SizedBox(
                   height: 20,
                 ),
+                RichText(
+                    maxLines: 1,
+                    text: TextSpan(children: [
+                      const TextSpan(
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                          text: 'By clicking Sign Up you are Agreed to our '),
+                      TextSpan(
+                          text: 'Terms & Conditions',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Colors.red,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const TermsAndConditions(),
+                                  ));
+                            }),
+                    ])),
+                const SizedBox(
+                  height: 10,
+                ),
                 AuthButton(
                   ontap: () {
                     validateAndSignUp();
@@ -196,6 +229,14 @@ class _SignUpState extends State<SignUp> {
           ),
         ),
       ),
+    );
+  }
+
+  buildwebview() {
+    return const WebView(
+      initialUrl:
+          'https://sites.google.com/view/jajaapplication/terms-and-conditions',
+      javascriptMode: JavascriptMode.unrestricted,
     );
   }
 }
