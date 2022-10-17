@@ -44,43 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCHQOsqlPZ_keII4hF9bEHCk3fskwhGK-4',
-    appId: '1:303909345121:web:998866c785facb3d479720',
-    messagingSenderId: '303909345121',
-    projectId: 'jaja-79a0d',
-    authDomain: 'jaja-79a0d.firebaseapp.com',
-    databaseURL: 'https://jaja-79a0d-default-rtdb.firebaseio.com',
-    storageBucket: 'jaja-79a0d.appspot.com',
+    apiKey: 'AIzaSyBSpN6GuPrGuB343WeLbZ-vdc12d82QwWw',
+    appId: '1:8009482651:web:c717bb7bbef326d640a13e',
+    messagingSenderId: '8009482651',
+    projectId: 'jaja-cf083',
+    authDomain: 'jaja-cf083.firebaseapp.com',
+    storageBucket: 'jaja-cf083.appspot.com',
+    measurementId: 'G-ENK86QZ4S9',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDUm_ka3zzp1sdq_tkvRnP47Pa7yLYlUCA',
-    appId: '1:303909345121:android:48f9107b9c1aa843479720',
-    messagingSenderId: '303909345121',
-    projectId: 'jaja-79a0d',
-    databaseURL: 'https://jaja-79a0d-default-rtdb.firebaseio.com',
-    storageBucket: 'jaja-79a0d.appspot.com',
+    apiKey: 'AIzaSyCeNwrZQ7h58bovSAdPw69e7xb0J9igfLk',
+    appId: '1:8009482651:android:14fd0a0efbf583a140a13e',
+    messagingSenderId: '8009482651',
+    projectId: 'jaja-cf083',
+    storageBucket: 'jaja-cf083.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAemSDXYfqp7Co9td5SQrSaPcMLqdchK5Q',
-    appId: '1:303909345121:ios:4177875306a3a471479720',
-    messagingSenderId: '303909345121',
-    projectId: 'jaja-79a0d',
-    databaseURL: 'https://jaja-79a0d-default-rtdb.firebaseio.com',
-    storageBucket: 'jaja-79a0d.appspot.com',
-    iosClientId: '303909345121-qeaivtip89fk7ue782gl0mddrpkjf53v.apps.googleusercontent.com',
-    iosBundleId: 'com.example.jaja',
+    apiKey: 'AIzaSyAOaCxojixoMi_igLgs8d8H7DnHzI2Hfls',
+    appId: '1:8009482651:ios:659e63f1ee85591740a13e',
+    messagingSenderId: '8009482651',
+    projectId: 'jaja-cf083',
+    storageBucket: 'jaja-cf083.appspot.com',
+    iosClientId: '8009482651-4jqv388plc4i1q9fnl0bgfft6qom5c9e.apps.googleusercontent.com',
+    iosBundleId: 'com.jaja.voiceshare',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAemSDXYfqp7Co9td5SQrSaPcMLqdchK5Q',
-    appId: '1:303909345121:ios:4177875306a3a471479720',
-    messagingSenderId: '303909345121',
-    projectId: 'jaja-79a0d',
-    databaseURL: 'https://jaja-79a0d-default-rtdb.firebaseio.com',
-    storageBucket: 'jaja-79a0d.appspot.com',
-    iosClientId: '303909345121-qeaivtip89fk7ue782gl0mddrpkjf53v.apps.googleusercontent.com',
-    iosBundleId: 'com.example.jaja',
+    apiKey: 'AIzaSyAOaCxojixoMi_igLgs8d8H7DnHzI2Hfls',
+    appId: '1:8009482651:ios:659e63f1ee85591740a13e',
+    messagingSenderId: '8009482651',
+    projectId: 'jaja-cf083',
+    storageBucket: 'jaja-cf083.appspot.com',
+    iosClientId: '8009482651-4jqv388plc4i1q9fnl0bgfft6qom5c9e.apps.googleusercontent.com',
+    iosBundleId: 'com.jaja.voiceshare',
   );
 }

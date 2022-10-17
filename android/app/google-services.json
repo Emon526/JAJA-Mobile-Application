@@ -1,38 +1,37 @@
 {
   "project_info": {
-    "project_number": "303909345121",
-    "firebase_url": "https://jaja-79a0d-default-rtdb.firebaseio.com",
-    "project_id": "jaja-79a0d",
-    "storage_bucket": "jaja-79a0d.appspot.com"
+    "project_number": "8009482651",
+    "project_id": "jaja-cf083",
+    "storage_bucket": "jaja-cf083.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:303909345121:android:b249909a1a559e70479720",
+        "mobilesdk_app_id": "1:8009482651:android:14fd0a0efbf583a140a13e",
         "android_client_info": {
           "package_name": "com.jaja.voiceshare"
         }
       },
       "oauth_client": [
         {
-          "client_id": "303909345121-b1miop4t315kts80keoacj84i40nr95d.apps.googleusercontent.com",
+          "client_id": "8009482651-orroq290kgora9io9dmp8o636kfp4m7g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDUm_ka3zzp1sdq_tkvRnP47Pa7yLYlUCA"
+          "current_key": "AIzaSyCeNwrZQ7h58bovSAdPw69e7xb0J9igfLk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "303909345121-b1miop4t315kts80keoacj84i40nr95d.apps.googleusercontent.com",
+              "client_id": "8009482651-orroq290kgora9io9dmp8o636kfp4m7g.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "303909345121-lsdqb4lih76m1752tjb4409o7tlsfufq.apps.googleusercontent.com",
+              "client_id": "8009482651-4jqv388plc4i1q9fnl0bgfft6qom5c9e.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.jaja.voiceshare"
