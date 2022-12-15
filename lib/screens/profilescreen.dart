@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/usermodel.dart';
@@ -146,12 +147,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               width: 20,
                             ),
                             InkWell(
-                              onTap: () {
-                                AuthController().deleteaccount(
-                                  context,
-                                  firebaseauth.currentUser!.uid,
-                                );
-                              },
+                              onTap: () => showDialog(
+                                  builder: (context) => CupertinoAlertDialog(
+                                        title: const Text(
+                                            "Confirm Delete Account"),
+                                        content: Column(
+                                          children: const [
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              "Are you sure want to delete your account?",
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              "Once account is deleted it can't be recovered",
+                                            ),
+                                          ],
+                                        ),
+                                        actions: <Widget>[
+                                          CupertinoDialogAction(
+                                            child: const Text("NO"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          CupertinoDialogAction(
+                                            child: const Text("YES"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              AuthController().deleteaccount(
+                                                context,
+                                                firebaseauth.currentUser!.uid,
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                  context: context),
                               child: const Icon(
                                 Icons.delete,
                                 color: Colors.red,
