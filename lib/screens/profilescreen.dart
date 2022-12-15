@@ -131,14 +131,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Colors.black,
                               ),
                             )),
-                        InkWell(
-                          onTap: () {
-                            AuthController().signOut(context);
-                          },
-                          child: const Icon(
-                            Icons.logout_outlined,
-                            color: Colors.black,
-                          ),
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                AuthController().signOut(context);
+                              },
+                              child: const Icon(
+                                Icons.logout_outlined,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                AuthController().deleteaccount(
+                                  context,
+                                  firebaseauth.currentUser!.uid,
+                                );
+                              },
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
                         )
                       ],
                     ),

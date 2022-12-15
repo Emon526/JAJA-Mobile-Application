@@ -10,11 +10,32 @@ class AuthController {
   var firebaseAuth = FirebaseAuth.instance;
 
   void signOut(BuildContext context) async {
-    Navigator.pushReplacementNamed(context, '/SignInScreen');
+    const snackbar = SnackBar(
+      content: Text("Logout Successful"),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    Navigator.pop(context);
+    Navigator.popAndPushNamed(context, '/SignInScreen');
+
     await firebaseAuth.signOut();
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('uid');
+  }
+
+  void deleteaccount(BuildContext context, String uid) async {
+    const snackbar = SnackBar(
+      content: Text("Account Deleted"),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+
+    Navigator.pop(context);
+    Navigator.popAndPushNamed(context, '/SignInScreen');
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('uid');
+    await firebaseAuth.currentUser!.delete();
+
+    await firestore.collection('users').doc(uid).delete();
   }
 
   void loginUser(
